@@ -41,7 +41,7 @@ function Card({id,title,poster_path,release_date,overview, vote_average, genre_i
                       <Image className="movie__image" src={poster_path? `${urlImage}${poster_path}` : posterError} />
                       <div className="movie__div">
                         <ul className="movie__list">
-                          <li className="movie__list__title">{title}</li>
+                          <li className="movie__list__title"><h3>{title}</h3></li>
                           <li className="movie__list__date">{release_date}</li>
                           {genresNames.map((genre, index) => {
                             if ( genre !== undefined) {

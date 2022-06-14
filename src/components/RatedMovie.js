@@ -8,10 +8,10 @@ const RatedMovie = ({title,poster_path,release_date,overview, vote_average,genre
   const urlImage = 'https://image.tmdb.org/t/p/w500';
   let voteColor ;
 
-  const getRate =  (moviId) => {
+  const getRate =  (movieId) => {
     const movies = getMovies()
-    if(movies !== undefined && movies.hasOwnProperty(moviId)) {
-      return movies[moviId].rate
+    if(movies !== undefined && movies.hasOwnProperty(movieId)) {
+      return movies[movieId].rate
     }
   }
   const rate = getRate(id)
