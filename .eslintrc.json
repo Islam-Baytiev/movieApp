@@ -3,7 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "ignorePatterns": ["node_modules", "dist", "build"],
+  "ignorePatterns": ["node_modules", "dist", "build", "idea"],
   "extends": ["eslint:recommended", "plugin:react/recommended", "airbnb", "plugin:prettier/recommended", "plugin:import/errors", "plugin:import/warnings"],
   "parserOptions": {
     "ecmaFeatures": {
