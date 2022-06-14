@@ -3,7 +3,7 @@ import React from "react";
 
 function Error({ error }) {
   return error ? (
-      <Alert message="O, no, Error" type="success" />
+      <Alert message="Произошла ошибка, повторите запрос" type="success" />
   ) : null;
 }
 

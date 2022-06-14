@@ -1,37 +1,90 @@
 
 .container {
-  background: #E5E5E5;;
+  background: #E5E5E5;
+  min-height: 800px;
 }
 .movie {
-  max-width: 1010px;
+  max-width: 1025px;
   height:  auto;
   margin: 0 auto;
-  padding-top: 19px;
   background: #ffffff;
   display: flex;
   row-gap: 30px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   box-sizing: border-box;
-  &__card {
-    display: flex;
-    width: 45%;
-    margin-right: 2.5%;
-    margin-left: 2.5%;
-    border: 1px solid #f0f0f0;
-    border-radius: 5px;
-    max-height: 281px;
+  @media (max-width: 770px) {
 
   }
+  &__card {
+    display: flex;
+    width: 49%;
+    min-height: 281px;
+    border: 1px solid #f0f0f0;
+    border-radius: 5px;
+    position: relative;
+    transition-duration: .2s;
+    @media (max-width: 770px) {
+      padding: 10px;
+    }
+    &:hover {
+      cursor: pointer;
+      -webkit-box-shadow: 0px 0px 19px -1px rgba(4, 4, 4, 0.2);
+      -moz-box-shadow: 0px 0px 19px -1px rgba(4, 4, 4, 0.2);
+      box-shadow: 0px 0px 19px -1px rgba(4, 4, 4, 0.2);
+      transform: translateY(-1px);
+    }
+    @media (max-width: 770px) {
+      width: 100%;
+    }
+  }
+  &__circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 12px;
+    margin-right: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #E9D100;
+  }
+  &__spin {
+    margin: 0 auto;
+    height: auto;
+  }
+  &__rate {
+    margin-bottom: 10px;
+    @media (max-width: 770px) {
+      position: absolute;
+      top: 250px;
+      left: 10px;
+    }
+  }
+
   &__image {
     max-width: 183px;
-    height: auto;
+    height: 295px;
+    @media (max-width: 770px) {
+      max-width: 60px;
+      max-height: 91px;
+    }
+  }
+  &__div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 5px 1px 20px;
+    @media (max-width: 770px) {
+      padding: 0;
+      padding-left: 12px;
+      }
   }
   &__list {
     padding: 0;
-    margin: 12px 20px 49px 20px;
+    max-width: 230px;
     list-style: none;
-    >li{
+    >li {
       margin-bottom: 7px;
     }
     &__title {
@@ -55,8 +108,8 @@
       display: inline-block;
       font-size: 12px;
       padding:0 7px 0 7px;
+      margin-right: 8px ;
       text-align: center;
-      margin: 0;
     }
     &__text {
       font-style: normal;
@@ -64,7 +117,32 @@
       font-size: 12px;
       line-height: 22px;
       color: #000000;
+
+      @media (max-width: 770px) {
+        position: absolute;
+        left: 10px;
+        }
+
     }
   }
+}
+.circle {
+  &__red {
+    border-color: #E90000;
+  }
+  &__orange {
+    border-color: #E97E00;
+  }
+  &__yellow {
+    border-color: #E9D100;
+  }
+  &__green {
+    border-color:  #66E900;
+  }
+}
 
+.ant-image {
+  @media (max-width: 770px) {
+    max-height: 100px;
+  }
 }
