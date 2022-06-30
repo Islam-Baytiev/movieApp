@@ -3,9 +3,8 @@ import './Card.scss';
 import { Rate, Image } from 'antd';
 import format from 'date-fns/format';
 
-import { Consumer } from '../Context/Context';
-
-import posterError from './posterError.jpg';
+import { Consumer } from '../../Context/Context';
+import posterError from '../../assets/image/posterError.jpg';
 
 // eslint-disable-next-line camelcase
 function Card({ id, title, poster_path, release_date, overview, vote_average, genre_ids, onChangeRate }) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Rate, Image } from 'antd';
 
-import posterError from '../Card/posterError.jpg';
+import posterError from '../../assets/image/posterError.jpg';
 
 // eslint-disable-next-line camelcase
 const RatedMovie = ({ title, poster_path, release_date, overview, vote_average, genres, id, getMovies }) => {

@@ -1,15 +1,15 @@
-// eslint-disable-next-line import/order
 import React, { useEffect, useState } from 'react';
-import './App.css';
-
+import './App.scss';
 import axios from 'axios';
 import { Pagination, Input, Tabs, Alert } from 'antd';
 
 import Card from '../Card/Card';
 import Error from '../Error/Error';
 import Spinner from '../Spinner/Spinner';
-import { Provider } from '../Context/Context';
+import { Provider } from '../../Context/Context';
 import Rated from '../Rated/Rated';
+
+const debounce = require('lodash.debounce');
 
 const App = () => {
   const [movies, setMovies] = useState([]);
@@ -17,51 +17,49 @@ const App = () => {
   const [isError, setIsError] = useState(false);
   const [total, setTotal] = useState(null);
   const [page, setPage] = useState(1);
-  const [query, setQuery] = useState('return');
+  const [query, setQuery] = useState('');
   const [genres, setGenres] = useState(null);
   const { TabPane } = Tabs;
-  // eslint-disable-next-line global-require
-  const debounce = require('lodash.debounce');
 
-  useEffect(() => {
-    setIsLoading(true);
-    // eslint-disable-next-line consistent-return
-    const fetchMovie = async () => {
-      try {
+  // eslint-disable-next-line consistent-return
+  const fetchMovie = async () => {
+    try {
+      if (query !== '') {
         const { data } = await axios.get(
           `https://api.themoviedb.org/3/search/movie?api_key=4a4472922ec446302808be760563492d&query=${query}&page=${page}`
         );
         setIsError(false);
         return data;
-      } catch (err) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
       }
-    };
-    const genresMovie = async () => {
-      const { data } = await axios.get(
-        'https://api.themoviedb.org/3/genre/movie/list?api_key=4a4472922ec446302808be760563492d&language=en-US'
-      );
-      return data;
-    };
-    // Искуственная задержка для демонстрации спинера
-    setTimeout(() => {
-      fetchMovie().then((response) => {
-        setMovies(response);
-        setTotal(response.total_results);
-      });
-    }, 1000);
+    } catch (err) {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const genresMovie = async () => {
+    const { data } = await axios.get(
+      'https://api.themoviedb.org/3/genre/movie/list?api_key=4a4472922ec446302808be760563492d&language=en-US'
+    );
+    return data;
+  };
+  useEffect(() => {
     genresMovie().then((response) => {
       setGenres(response);
     });
+  }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    // eslint-disable-next-line consistent-return
+    fetchMovie().then((response) => {
+      setMovies(response);
+      setTotal(response.total_results);
+    });
   }, [page, query]);
 
-  // eslint-disable-next-line no-shadow
   const changePage = (page) => {
     setPage(page);
   };
-
   const onChangeRate = async (id, rate) => {
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/movie/${id}}?api_key=4a4472922ec446302808be760563492d`
@@ -70,7 +68,7 @@ const App = () => {
       const movies = JSON.stringify([]);
       localStorage.setItem('selectedMovies', movies);
     }
-    // eslint-disable-next-line no-shadow
+
     const movies = JSON.parse(localStorage.getItem('selectedMovies'));
     let newMovies = {
       ...movies,
@@ -89,7 +87,6 @@ const App = () => {
     setQuery(event.target.value);
     setIsLoading(true);
   };
-
   return (
     <Provider value={genres}>
       <section className="container">
@@ -114,9 +111,8 @@ const App = () => {
               ) : (
                 // eslint-disable-next-line react/jsx-no-useless-fragment
                 <>
-                  {movies?.results.map((el, index) => (
-                    // eslint-disable-next-line react/no-array-index-key,react/jsx-props-no-spreading
-                    <Card key={index} onChangeRate={onChangeRate} load={isLoading} error={isError} {...el} />
+                  {movies?.results.map((el) => (
+                    <Card key={el.backdrop_path} onChangeRate={onChangeRate} load={isLoading} error={isError} {...el} />
                   ))}
                 </>
               )}

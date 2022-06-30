@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Alert } from 'antd';
 
 import RatedMovie from '../RatedMovie/RatedMovie';
 
@@ -15,8 +16,9 @@ const Rated = () => {
     try {
       const moviesRate = getMovies();
       setMovieRate(Object.values(moviesRate));
-      // eslint-disable-next-line no-empty
-    } catch (err) {}
+    } catch (err) {
+      <Alert message="Ошибка" type="success" />;
+    }
   }, []);
 
   return (
