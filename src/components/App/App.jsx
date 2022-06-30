@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.scss';
 import axios from 'axios';
 import { Pagination, Input, Tabs, Alert } from 'antd';
+import debounce from 'lodash.debounce';
 
 import Card from '../Card/Card';
 import Error from '../Error/Error';
@@ -9,11 +10,9 @@ import Spinner from '../Spinner/Spinner';
 import { Provider } from '../../Context/Context';
 import Rated from '../Rated/Rated';
 
-const debounce = require('lodash.debounce');
-
 const App = () => {
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [total, setTotal] = useState(null);
   const [page, setPage] = useState(1);
@@ -21,22 +20,12 @@ const App = () => {
   const [genres, setGenres] = useState(null);
   const { TabPane } = Tabs;
 
-  // eslint-disable-next-line consistent-return
-  const fetchMovie = async () => {
-    try {
-      if (query !== '') {
-        const { data } = await axios.get(
-          `https://api.themoviedb.org/3/search/movie?api_key=4a4472922ec446302808be760563492d&query=${query}&page=${page}`
-        );
-        setIsError(false);
-        return data;
-      }
-    } catch (err) {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
+  const fetchMovie = async (query, page) => {
+    return await axios.get(
+      `https://api.themoviedb.org/3/search/movie?api_key=4a4472922ec446302808be760563492d&query=${query}&page=${page}`
+    );
   };
+
   const genresMovie = async () => {
     const { data } = await axios.get(
       'https://api.themoviedb.org/3/genre/movie/list?api_key=4a4472922ec446302808be760563492d&language=en-US'
@@ -49,13 +38,22 @@ const App = () => {
     });
   }, []);
   useEffect(() => {
-    setIsLoading(true);
-    // eslint-disable-next-line consistent-return
-    fetchMovie().then((response) => {
-      setMovies(response);
-      setTotal(response.total_results);
-    });
-  }, [page, query]);
+    if (query.length !== 0) {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const response = await fetchMovie(query, page);
+
+          setMovies(response.data.results);
+          setTotal(response.data.total_results);
+          setIsLoading(false);
+        } catch {
+          setIsError(true);
+          setIsLoading(false);
+        }
+      })();
+    }
+  }, [query, page]);
 
   const changePage = (page) => {
     setPage(page);
@@ -104,15 +102,15 @@ const App = () => {
                 {total === 0 ? <Alert message="По вашему запросу ничего не найдено" type="success" /> : null}
                 {isError === true ? <Error error={isError} /> : null}
               </div>
-              {isLoading === true ? (
+              {isLoading ? (
                 <div className="movie__spin">
                   <Spinner style={{}} isLoading={isLoading} />
                 </div>
               ) : (
                 // eslint-disable-next-line react/jsx-no-useless-fragment
                 <>
-                  {movies?.results.map((el) => (
-                    <Card key={el.backdrop_path} onChangeRate={onChangeRate} load={isLoading} error={isError} {...el} />
+                  {movies.map((el) => (
+                    <Card key={el.id} onChangeRate={onChangeRate} load={isLoading} error={isError} {...el} />
                   ))}
                 </>
               )}

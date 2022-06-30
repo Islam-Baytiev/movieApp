@@ -24,10 +24,9 @@ const Rated = () => {
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
-      {movieRate?.map((movie, index) => (
+      {movieRate?.map((movie) => (
         <RatedMovie
-          /* eslint-disable-next-line react/no-array-index-key */
-          key={index}
+          key={movie.data.poster_path}
           title={movie.data.title}
           poster_path={movie.data.poster_path}
           release_date={movie.data.release_date}
